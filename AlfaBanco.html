@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Bancário</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 30px auto; padding: 20px; }
+        input, button { padding: 10px; margin: 8px 0; width: 100%; }
+        .card { border: 1px solid #ccc; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .sucesso { color: green; font-weight: bold; }
+        .erro { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <h1>Cadastro Bancário ??</h1>
+
+    <div class="card">
+        <label>Nome:</label>
+        <input type="text" id="nomeCliente" placeholder="Nome completo">
+
+        <label>CPF:</label>
+        <input type="text" id="cpfCliente" placeholder="000.000.000-00">
+
+        <label>Número do Cartão:</label>
+        <input type="text" id="numeroCartao" placeholder="0000 0000 0000 0000">
+
+        <label>Data de Vencimento:</label>
+        <input type="text" id="dataVencimento" placeholder="MM/AA">
+
+        <label>CVV:</label>
+        <input type="text" id="cvvCartao" placeholder="CVV">
+
+        <label>Data de Nascimento:</label>
+        <input type="date" id="dataNascimento">
+        
+        <button onclick="salvarCliente()">Salvar Cliente</button>
+        <p id="mensagem"></p>
+    </div>
+
+    <!-- Botão para exibir dados salvos -->
+    <button onclick="verDados()">Ver Dados Salvos</button>
+    <div id="dadosCliente"></div>
+
+    <script>
+        function salvarCliente() {
+            const cliente = {
+                nome: document.getElementById('nomeCliente').value,
+                cpf: document.getElementById('cpfCliente').value,
+                cartao: document.getElementById('numeroCartao').value,
+                vencimento: document.getElementById('dataVencimento').value,
+                cvv: document.getElementById('cvvCartao').value,
+                nascimento: document.getElementById('dataNascimento').value
+            };
+
+            // Verificar se todos os campos foram preenchidos
+            if (cliente.nome === '' || cliente.cpf === '' || cliente.cartao === '' ||
+                cliente.vencimento === '' || cliente.cvv === '' || cliente.nascimento === '') {
+                document.getElementById('mensagem').textContent = "Por favor, preencha todos os campos!";
+                document.getElementById('mensagem').className = 'erro'; // Mensagem de erro
+                return;
+            }
+
+            // Salvar os dados no localStorage
+            localStorage.setItem("dadosCliente", JSON.stringify(cliente));
+
+            // Exibir mensagem de sucesso
+            document.getElementById('mensagem').textContent = "Dados salvos com sucesso! ?";
+            document.getElementById('mensagem').className = 'sucesso'; // Mensagem de sucesso
+        }
+
+        function verDados() {
+            const dadosSalvos = localStorage.getItem("dadosCliente");
+
+            if (dadosSalvos) {
+                const cliente = JSON.parse(dadosSalvos);
+                // Exibir os dados do cliente
+                const dadosClienteDiv = document.getElementById('dadosCliente');
+                dadosClienteDiv.innerHTML = `
+                    <h3>Dados Salvos:</h3>
+                    <p><strong>Nome:</strong> ${cliente.nome}</p>
+                    <p><strong>CPF:</strong> ${cliente.cpf}</p>
+                    <p><strong>Cartão:</strong> ${cliente.cartao}</p>
+                    <p><strong>Vencimento:</strong> ${cliente.vencimento}</p>
+                    <p><strong>CVV:</strong> ${cliente.cvv}</p>
+                    <p><strong>Data de Nascimento:</strong> ${cliente.nascimento}</p>
+                `;
+            } else {
+                document.getElementById('dadosCliente').textContent = "Nenhum dado encontrado!";
+            }
+        }
+    </script>
+
+</body>
+</html>
